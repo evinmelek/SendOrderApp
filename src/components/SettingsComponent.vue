@@ -11,17 +11,35 @@
     </label>
   </div> 
   <div>
-    <label class="label toggle"> <span class="font"> Sound</span>
+    <label class="label toggle"> <span class="font">Sound</span>
       <input type="checkbox" />
       <div class="toggle-control"  @click="checkSound"></div><span class="material-icons">volume_up</span>
     </label>
   </div> 
   <div>
-    <label class="label toggle"> <span class="font"> Time</span>
+    <label class="label toggle"> <span class="font">Time</span>
       <input type="checkbox"  />
       <div class="toggle-control"  @click="checkTime"></div><span class="material-icons">schedule</span>
     </label>
   </div>  
+  <div>
+    <label class="label toggle"> <span class="font">Logo</span>
+      <input type="checkbox"  />
+      <div class="toggle-control"  @click="checkLogo"></div><span class="material-icons">wallpaper</span>
+    </label>
+  </div> 
+  <div>
+    <label class="label toggle"> <span class="font">Ad</span>
+      <input type="checkbox"  />
+      <div class="toggle-control"  @click="checkAd"></div><span class="material-icons">format_indent_increase</span>
+    </label>
+  </div> 
+  <div>
+    <label class="label toggle"> <span class="font">Theme</span>
+      <input type="checkbox"  />
+      <div class="toggle-control"  @click="checkTheme"></div><span class="material-icons">wallpaper</span>
+    </label>
+  </div> 
 </template>
 
 <script>
@@ -34,9 +52,14 @@ export default {
       callsettings: [],
       soundsettings: [],
       generalsettings: [],
+      backgroundsettings: [],
+      advertisements: [],
       status: "",
       soundstatus: "",
       timestatus: "",
+      imagestatus: "",
+      adstatus: "",
+      themestatus: ""
     }
   },
   methods:{
@@ -70,6 +93,39 @@ export default {
       const res = axios.post(localhost + ':3000/api/generalsettings', { 
       methods: "POST, PUT", 
       timestatus: this.timestatus, 
+      })
+      this.generalsettings = [...this.generalsettings, res.data]
+    },
+    checkTheme() {
+      this.imagestatus = !this.imagestatus
+      this.$emit("input" )
+      console.log(" Theme Status is: ",this.imagestatus)
+
+      const res = axios.post(localhost + ':3000/api/backgroundsettings', { 
+      methods: "POST, PUT", 
+      imagestatus: this.imagestatus, 
+      })
+      this.backgroundsettings = [...this.backgroundsettings, res.data]
+    },
+    checkAd() {
+      this.adstatus = !this.adstatus
+      this.$emit("input" )
+      console.log(" Advertisement Status is: ",this.adstatus)
+
+      const res = axios.post(localhost + ':3000/api/advertisements', { 
+      methods: "POST, PUT", 
+      adstatus: this.adstatus, 
+      })
+      this.advertisements = [...this.advertisements, res.data]
+    },
+    checkLogo() {
+      this.logostatus = !this.logostatus
+      this.$emit("input" )
+      console.log(" Logo Status is: ",this.logostatus)
+
+      const res = axios.post(localhost + ':3000/api/generalsettings', { 
+      methods: "POST, PUT", 
+      logostatus: this.logostatus, 
       })
       this.generalsettings = [...this.generalsettings, res.data]
     },

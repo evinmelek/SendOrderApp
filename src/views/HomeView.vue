@@ -1,6 +1,8 @@
 <template>
   <div>
-    <HomeComponent @pressed="value = $event" :selfValue="value"></HomeComponent>
+   <keep-alive>
+    <HomeComponent></HomeComponent>
+   </keep-alive>
   </div> 
 </template>
 

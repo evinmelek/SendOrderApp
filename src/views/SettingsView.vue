@@ -1,7 +1,8 @@
 <template>
   <div>
     <keep-alive>
-     <SettingsComponent></SettingsComponent> </keep-alive> 
+     <SettingsComponent></SettingsComponent> 
+     </keep-alive> 
   </div>
 </template>
 

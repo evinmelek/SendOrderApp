@@ -1,77 +1,94 @@
 <template> 
-  <div class="settings-icon-bar">
+  <div class="settings-icon-bar ">
     <router-link to="/settings/pre-call" class="material-icons sound">settings_voice</router-link> 
     <router-link to="/settings/system" class="material-icons call">settings_suggest</router-link>  
   </div>
   <router-view/>  
   <div>
-    <label class="label toggle"> <span class="font"> PreCall</span>
+    <label class="label toggle "> <span class="font "> PreCall</span>
       <input type="checkbox" />
-      <div class="toggle-control" @click="checkPreCall"></div><span class="material-icons">mic</span>
+      <div class="toggle-control " @click="checkPreCall"></div><span class="material-icons ">mic</span>
     </label>
   </div> 
   <div>
-    <label class="label toggle"> <span class="font">Sound</span>
+    <label class="label toggle "> <span class="font ">Sound</span>
       <input type="checkbox" />
-      <div class="toggle-control"  @click="checkSound"></div><span class="material-icons">volume_up</span>
+      <div class="toggle-control "  @click="checkSound"></div><span class="material-icons ">volume_up</span>
     </label>
   </div> 
   <div>
-    <label class="label toggle"> <span class="font">Time</span>
+    <label class="label toggle "> <span class="font ">Time</span>
       <input type="checkbox"  />
-      <div class="toggle-control"  @click="checkTime"></div><span class="material-icons">schedule</span>
+      <div class="toggle-control "  @click="checkTime"></div><span class="material-icons ">schedule</span>
     </label>
   </div>  
   <div>
-    <label class="label toggle"> <span class="font">Logo</span>
+    <label class="label toggle "> <span class="font ">Logo</span>
       <input type="checkbox"  />
-      <div class="toggle-control"  @click="checkLogo"></div><span class="material-icons">wallpaper</span>
+      <div class="toggle-control "  @click="checkLogo"></div><span class="material-icons ">wallpaper</span>
     </label>
   </div> 
   <div>
-    <label class="label toggle"> <span class="font">Ad</span>
+    <label class="label toggle "> <span class="font ">Ad</span>
       <input type="checkbox"  />
-      <div class="toggle-control"  @click="checkAd"></div><span class="material-icons">format_indent_increase</span>
+      <div class="toggle-control "  @click="checkAd"></div><span class="material-icons ">format_indent_increase</span>
     </label>
   </div> 
   <div>
-    <label class="label toggle"> <span class="font">Theme</span>
+    <label class="label toggle "> <span class="font ">Theme</span>
       <input type="checkbox"  />
-      <div class="toggle-control"  @click="checkTheme"></div><span class="material-icons">wallpaper</span>
+      <div class="toggle-control "  @click="checkTheme"></div><span class="material-icons ">wallpaper</span>
     </label>
   </div> 
 </template>
 
 <script>
 import axios from "axios"
-const localhost =  "http://192.168.1.109" 
+const BASE_URL =  "http://192.168.1.102:3000" 
 
 export default { 
   data(){
     return{
-      callsettings: [],
-      soundsettings: [],
-      generalsettings: [],
-      backgroundsettings: [],
-      advertisements: [],
-      status: "",
-      soundstatus: "",
-      timestatus: "",
-      imagestatus: "",
-      adstatus: "",
-      themestatus: ""
+      callsettings: {
+        status: "",
+        id: ""
+      },
+      soundsettings: {
+        soundstatus: "",
+        id: "",
+      },
+      generalsettings: {
+        timestatus: "",
+        id: "", 
+      },
+      backgroundsettings: {
+        imagestatus: "",
+        id: ""
+      },
+      advertisements: {
+        adstatus: "",
+        id: ""
+      },
     }
   },
-  methods:{
+  methods:{  
     checkPreCall() {
       this.status = !this.status
       this.$emit("input")
       console.log(" PreCall Status is: ",this.status)
 
-      const res = axios.put(localhost + ':3000/api/callsettings', { 
-      methods: "POST, PUT",
+      const ress = axios.get(BASE_URL + '/api/callsettings/', { 
+      methods: "PUT",
       status: this.status, 
-      })
+      id: 1
+      }).catch(err=>{console.log(err)})
+      this.status = [...this.callsettings, ress.data.callsettings.status] 
+
+      const res = axios.put(BASE_URL + '/api/callsettings/', { 
+      methods: "PUT",
+      status: this.status, 
+      id: 1
+      }).catch(err=>{console.log(err)})
       this.callsettings = [...this.callsettings, res.data] 
     },
     checkSound() {
@@ -79,10 +96,11 @@ export default {
       this.$emit("input")
       console.log(" Sound Status is: ",this.soundstatus)
 
-      const res = axios.put(localhost + ':3000/api/soundsettings', { 
-      methods: "POST, PUT",
+      const res = axios.put(BASE_URL + '/api/soundsettings/', { 
+      methods: "PUT",
       soundstatus: this.soundstatus, 
-      })
+      id: 1
+      }).catch(err=>{console.log(err)})
       this.soundsettings = [...this.soundsettings, res.data]
     },
     checkTime() {
@@ -90,10 +108,11 @@ export default {
       this.$emit("input" )
       console.log(" Time Status is: ",this.timestatus)
 
-      const res = axios.post(localhost + ':3000/api/generalsettings', { 
-      methods: "POST, PUT", 
+      const res = axios.put(BASE_URL + '/api/generalsettings/', { 
+      methods: "PUT", 
       timestatus: this.timestatus, 
-      })
+      id: 1
+      }).catch(err=>{console.log(err)})
       this.generalsettings = [...this.generalsettings, res.data]
     },
     checkTheme() {
@@ -101,10 +120,11 @@ export default {
       this.$emit("input" )
       console.log(" Theme Status is: ",this.imagestatus)
 
-      const res = axios.post(localhost + ':3000/api/backgroundsettings', { 
-      methods: "POST, PUT", 
-      imagestatus: this.imagestatus, 
-      })
+      const res = axios.put(BASE_URL + '/api/backgroundsettings/', { 
+      methods: "PUT", 
+      imagestatus: this.imagestatus,
+      id: 1
+      }).catch(err=>{console.log(err)})
       this.backgroundsettings = [...this.backgroundsettings, res.data]
     },
     checkAd() {
@@ -112,10 +132,11 @@ export default {
       this.$emit("input" )
       console.log(" Advertisement Status is: ",this.adstatus)
 
-      const res = axios.post(localhost + ':3000/api/advertisements', { 
-      methods: "POST, PUT", 
+      const res = axios.put(BASE_URL + '/api/advertisements/', { 
+      methods: "PUT", 
       adstatus: this.adstatus, 
-      })
+      id: 1
+      }).catch(err=>{console.log(err)})
       this.advertisements = [...this.advertisements, res.data]
     },
     checkLogo() {
@@ -123,10 +144,11 @@ export default {
       this.$emit("input" )
       console.log(" Logo Status is: ",this.logostatus)
 
-      const res = axios.post(localhost + ':3000/api/generalsettings', { 
-      methods: "POST, PUT", 
-      logostatus: this.logostatus, 
-      })
+      const res = axios.put(BASE_URL + '/api/generalsettings/', { 
+      methods: "PUT", 
+      logostatus: this.logostatus,
+      id: 1
+      }).catch(err=>{console.log(err)})
       this.generalsettings = [...this.generalsettings, res.data]
     },
   },

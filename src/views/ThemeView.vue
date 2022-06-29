@@ -1,6 +1,8 @@
 <template>
   <div>
-    <ThemeComponent></ThemeComponent>
+    <keep-alive>
+      <ThemeComponent></ThemeComponent>
+    </keep-alive>
   </div>
 </template>
 

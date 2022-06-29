@@ -1,86 +1,101 @@
 <template>
-  <div>
-    <space class="background-space">
-      <div class="dropdown"><button class="dropbtn">Background Color<span class="material-icons large"> brush </span> </button>
-      <select class="color-dropbtn" v-model="selectedColor">  
-          <option href="#" class="red">Maroon</option>
-          <option href="#" class="green">Green</option>
-          <option href="#" class="grey">Silver</option>
-          <option href="#" class="blue">Teal</option>
-          <option href="#" class="yellow">Goldenrod</option>
-          <option href="#" class="purple">Orchid</option>
-          <option href="#" class="white">White</option>
-          <option href="#" class="pink">Pink</option> 
-          <option href="#" class="black"> Grey</option> 
+  <keep-alive>
+      <div>
+    <space class="background-space ">
+      <div class="dropdown "><button class="dropbtn ">Background Color<span class="material-icons large "> brush </span> </button>
+      <select class="color-dropbtn " v-model="selectedColor">  
+          <option class="red ">Maroon</option>
+          <option class="green ">Green</option>
+          <option class="grey ">Silver</option>
+          <option  class="blue ">Teal</option>
+          <option class="yellow ">Goldenrod</option>
+          <option class="purple ">Orchid</option>
+          <option class="white ">White</option>
+          <option class="pink ">Pink</option> 
+          <option class="black "> Grey</option> 
       </select> 
-      <button class="material-icons btn-blue down" @click="postColor">add</button>
+      <button class="material-icons btn-blue down " @click="postColor">add</button>
       </div>   
     </space> 
     <div>
-      <button class="dropbtn">Company Logo <span class="material-icons large"> add_photo_alternate</span></button>
-      <input type="file" accept="image/*" class="select-file" id="logoId" @change="uploadLogo"> 
-      <button class="material-icons btn-blue" @click="sendLogo">add</button>
+      <button class="dropbtn ">Company Logo <span class="material-icons large "> add_photo_alternate</span></button>
+      <input type="file" accept="image/*" class="select-file " id="logoId" @change="uploadLogo"> 
+      <button class="material-icons btn-blue " @click="sendLogo" :disabled="noLogo">add</button>
       <ul>
         <li> 
-        <img :src="companylogo"><span class="material-icons small" @click="delLogo"> delete</span>
+        <img :src="companylogo"><span class="material-icons small " @click="delLogo"> delete</span>
         </li>
       </ul>
     </div>
     <div>
-      <button class="dropbtn">Advertisement <span class="material-icons large"> add_photo_alternate</span></button>
-      <input class="select-file" type="file" accept="image/*,video/*" id="adId" @change="uploadAd">
-      <button class="material-icons btn-blue" id="button" @click="postAd">add</button>
-      <div class="preview">
-        <video class="video-preview" id="video-preview" controls v-show="file != ''" autoplay/>
+      <button class="dropbtn ">Advertisement <span class="material-icons large"> add_photo_alternate</span></button>
+      <input class="select-file " type="file" accept="image/*,video/*" id="adId" @change="uploadAd">
+      <button class="material-icons btn-blue " id="button" @click="postAd" :disabled="noFile">add</button>
+      <div class="preview ">
+        <video class="video-preview " id="video-preview" controls v-show="file != ''" autoplay/>
         <ul>
           <li>  
-          <img :src="file"><span class="material-icons small" @click="delAd"> close</span>
+          <img :src="file"><span class="material-icons small " @click="delAd"> close</span>
           </li>
         </ul> 
       </div> 
     </div>
     <div>
-      <button class="dropbtn">Change Theme <span class="material-icons large"> add_photo_alternate</span></button>
-      <input type="file" accept="image/*" class="select-file" ref="file" id="themeId" @change="uploadTheme">
-      <button class="material-icons btn-blue" @click="sendTheme">add</button>
+      <button class="dropbtn ">Change Theme <span class="material-icons large "> add_photo_alternate</span></button>
+      <input type="file" accept="image/*" class="select-file " ref="file" id="themeId" @change="uploadTheme">
+      <button class="material-icons btn-blue " @click="sendTheme" :disabled="noTheme">add</button>
       <ul>
         <li> 
-        <img :src="image"><span class="material-icons small" @click="delTheme"> cancel_presentation</span>
+        <img :src="image"><span class="material-icons small " @click="delTheme"> cancel_presentation</span>
         </li>
       </ul>
     </div>
   </div>
+  </keep-alive>
 </template>
 
 <script> 
 import axios from "axios"
-const localhost =  "http://192.168.1.109" 
+const BASE_URL =  "http://192.168.1.102:3000" 
 
 export default {
   data(){
     return{
       backgroundsettings: {
         color: "",
-        image: ""
+        image: "",
+        id: ""
       },
-      generealsettings: [],
-      advertisements: [],  
-      image: "", 
+      generealsettings: {
+        companylogo: "",
+        id: ""
+        
+      },
+      advertisements: { 
+        file: "", 
+        id: "" 
+      },  
+      image: "",  
+      file: "",
       companylogo: "",
-      file: "",  
-      selectedColor: "" 
+      selectedColor: "",
+      noFile: true,
+      noLogo: true,
+      noTheme: true 
     }
   },
   methods:{
-    postColor() {
-        const res = axios.post(localhost + ":3000/api/backgroundsettings", {
+    postColor() { 
+        const res = axios.put(BASE_URL + "/api/backgroundsettings", { 
+          id: 1,
           color: this.selectedColor, 
-        })
+        }).catch(error=>(console.log(error)))
         this.backgroundsettings = [...this.backgroundsettings, res.data]
-        this.color = this.selectedColor 
+        this.color = this.selectedColor   
       },
     uploadLogo(e) {
       //this.companyLogo = this.$refs.file.files[0] 
+        this.noLogo = !e.target.files.length
         var files = e.target.files || e.dataTransfer.files
       if (!files.length>20045)
         return
@@ -95,13 +110,14 @@ export default {
       }
       reader.readAsDataURL(file)
     },
-    delLogo() {
+    delLogo() {  
       this.companylogo = ''
     },
     sendLogo() { 
-      const res = axios.post(localhost + ":3000/api/generalsettings", { 
+      const res = axios.put(BASE_URL + "/api/generalsettings", { 
+        id: 1,
         companylogo: this.companylogo,
-      })
+      }).catch(err=>{console.log(err)})
       this.generalsettings = [...this.generalsettings, res.data]
       this.companylogo = ""
 
@@ -110,6 +126,7 @@ export default {
       //console.log(filepath.value) 
     },  
     uploadAd(e) {
+      this.noFile = !e.target.files.length
       var files = e.target.files || e.dataTransfer.files
       if (!files.length)
         return;
@@ -148,8 +165,9 @@ export default {
         console.log('Error: ', error)
       }
     }
-      const res = axios.post(localhost + ':3000/api/advertisements', { 
-      file: this.file
+      const res = axios.put(BASE_URL + '/api/advertisements', { 
+        id: 1,
+        file: this.file
     }).catch(error => {console.log(error)})
       this.advertisement = [...this.advertisement, res.data]
       this.file = this.reader.result
@@ -157,6 +175,7 @@ export default {
 
     uploadTheme(e) {
       // this.theme = this.$refs.file.files
+        this.noTheme = !e.target.files.length
         var files = e.target.files || e.dataTransfer.files
       if (!files.length)
         return
@@ -170,13 +189,14 @@ export default {
         show.image = e.target.result
       };
       reader.readAsDataURL(file)
-    },
+      console.log(typeof(file))
+    }, 
     delTheme() {
       this.image = ''
     },  
-    async sendTheme() {
-      console.log("image>>>",this.image)
-      const res = await axios.post(localhost + ":3000/api/backgroundsettings", {  
+    async sendTheme() { 
+      const res = await axios.put(BASE_URL + "/api/backgroundsettings", {  
+        id: 1,
         image: this.image  
       }).catch(error => {console.log(error)})
       this.backgroundsettings = [...this.backgroundsettings, res]

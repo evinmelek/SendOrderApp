@@ -1,12 +1,13 @@
 <template>
-  <div class="container">
+<keep-alive>
+    <div class="container ">
     <div>
       <input
         type="number" 
         v-model="value" 
         placeholder="NUM"/>
     </div>
-    <div class="consecutive"> 
+    <div class="consecutive "> 
       <button class="pre " @click="sendPre1" :orderno="pre1">{{ pre1 }}</button> 
       <button class="pre " @click="sendPre2" :orderno="pre">{{ pre2 }}</button> 
       <button class="pre " @click="sendPre3" :orderno="pre">{{ pre3 }}</button> 
@@ -24,15 +25,17 @@
         </button>
         <button class="btn btn-c " :class="buttonTheme" @click="clear('all')">C</button>
         <button class="btn btn-del " :class="buttonTheme" @click="clear()"><span class="material-icons large ">backspace</span></button>
-        <button class="btn btn-call " :class="buttonTheme" @click="send(); clear('all'); "><span class="material-icons large ">send</span></button> 
+        <button class="btn btn-call " :class="buttonTheme" @click="send(); clear('all'); " type="submit"
+        :disabled="isDisable(value)"><span class="material-icons large ">send</span></button> 
       </div>
     </div>
   </div>
+</keep-alive>
 </template>
 
 <script>  
 import axios from "axios" 
-const localhost =  "http://192.168.1.109" 
+const BASE_URL =  "http://192.168.1.102:3000" 
 
 export default { 
   data() {
@@ -49,7 +52,7 @@ export default {
     press(key) {
       this.value = `${this.value}${key}`
       this.total = `${this.value}`
-      this.pre0 = this.total++ //when delete this the first prenumber is the same as orderno
+      this.pre0 = this.total++ //when delete this the first pre-number is the same as orderno
       this.pre1 = this.total++
       this.pre2 = this.total++
       this.pre3 = this.total++
@@ -58,14 +61,16 @@ export default {
     clear(type) {
       if (type === 'all') this.value = ''
       else this.value = this.value.substring(0, this.value.length - 1)
-
     }, 
     async send() {
-      const res = await axios.post(localhost + ":3000/api/orders", {  
+      const res = await axios.post(BASE_URL + "/api/orders"  , { 
         orderno: this.value,
-      }) 
+      }).catch(err=>{console.log(err)}) 
       this.orders = [...this.orders, res.data]
       this.orderno = "" 
+    },
+    isDisable() {
+      return this.value.length == 0 
     },
     async sendPre1() {
       this.value = this.pre1 
@@ -80,6 +85,11 @@ export default {
       this.value = this.pre4 
     },        
   },
+  created() {
+        window.addEventListener('beforeunload', () => { 
+            console.log(this.anything);
+        }, false)
+    },
   watch: {
     value() {
       this.$emit('pressed', this.value)
@@ -87,6 +97,8 @@ export default {
     orderno() {
       this.value = this.orderno
     },
+  },
+  computed: {
   },
 }
 </script>
@@ -127,7 +139,7 @@ button{
   margin-right: 8%;
 }
 .container-a{
-  padding: 10% 0% 0% 0%;
+  padding: 10% 0% 0% 0%; 
   float: center;
   margin: auto;  
 }
@@ -155,7 +167,7 @@ button{
 .btn-call{
   background-color: #81C784; 
   height: 170%;
-  width: 340%;  
+  width: 340%;   
 }
 .btn-del{
   background-color: #2196F3;  

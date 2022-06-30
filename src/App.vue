@@ -5,7 +5,7 @@
     <router-link to="/theme" class="material-icons">color_lens</router-link> 
     <router-link to="/settings" class="material-icons">settings</router-link>
   </div> 
- <keep-alive> <router-view/></keep-alive>  
+  <router-view/> 
 </template>
 
 <script>

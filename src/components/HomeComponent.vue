@@ -1,5 +1,4 @@
-<template>
-<keep-alive>
+<template> 
     <div class="container ">
     <div>
       <input
@@ -29,8 +28,7 @@
         :disabled="isDisable(value)"><span class="material-icons large ">send</span></button> 
       </div>
     </div>
-  </div>
-</keep-alive>
+  </div> 
 </template>
 
 <script>  

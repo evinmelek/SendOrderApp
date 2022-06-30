@@ -1,5 +1,4 @@
-<template>
-  <keep-alive>
+<template> 
     <div>
   <div class="settings-icon-bar">
     <p class="material-icons small settings"><a class="material-icons">settings_suggest</a></p>  
@@ -36,8 +35,7 @@
       <p>Close Device</p>  
       <button id="power" class="power-button "  @click="checkPower"><span class="material-icons Z">power_settings_new</span><input v-show="false" type="checkbox" /></button>  
     </div>   
-</div>
-  </keep-alive>  
+</div>  
 </template>
 
 <script>
@@ -109,23 +107,21 @@ export default {
       //  .then(data => (this.subtitle = data.reverse()))
       }, 
       checkPower() {
-        this.close = !this.close
-        let x = document.getElementById("power")
-        x.style.color != x.style.color
-        if(this.close==false){
-          x.style.color="white"
-        }else{
-          x.style.color="black"
-         }
-        
+         this.close = !this.close
+//        let x = document.getElementById("power")
+//        x.style.color != x.style.color
+//        if(this.close==false){
+//          x.style.color="white"
+//        }else{
+//          x.style.color="black"
+//         } 
         this.$emit("input" )
         console.log(" Power is: ",this.close)
-        const res = axios.put(BASE_URL + '/api/generalsettings', { 
+        axios.put(BASE_URL + '/api/generalsettings', { 
         methods: "POST, PUT", 
         id: 1,
         close: this.close, 
-        }).catch(err=>{console.log(err)})
-        this.generalsettings = [...this.generalsettings, res.data]
+        }).catch(err=>{console.log(err)}) 
       }, 
     },
     created(){     

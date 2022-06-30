@@ -1,5 +1,4 @@
-<template>
-  <keep-alive>
+<template> 
       <div>
     <space class="background-space ">
       <div class="dropdown "><button class="dropbtn ">Background Color<span class="material-icons large "> brush </span> </button>
@@ -50,8 +49,7 @@
         </li>
       </ul>
     </div>
-  </div>
-  </keep-alive>
+  </div> 
 </template>
 
 <script> 

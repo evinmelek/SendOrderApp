@@ -4,39 +4,39 @@
     <router-link to="/settings/system" class="material-icons call">settings_suggest</router-link>  
   </div>
   <router-view/>  
-  <div>
+  <div v-for="call in callsettings" :key="call">
     <label class="label toggle "> <span class="font "> PreCall</span>
-      <input type="checkbox" />
+      <input type="checkbox" v-model="call.status"/>
       <div class="toggle-control " @click="checkPreCall"></div><span class="material-icons ">mic</span>
     </label>
   </div> 
-  <div>
+  <div v-for="sound in soundsettings" :key="sound">
     <label class="label toggle "> <span class="font ">Sound</span>
-      <input type="checkbox" />
+      <input type="checkbox" v-model="sound.soundstatus"/>
       <div class="toggle-control "  @click="checkSound"></div><span class="material-icons ">volume_up</span>
     </label>
   </div> 
-  <div>
+  <div v-for="time in generalsettings" :key="time">
     <label class="label toggle "> <span class="font ">Time</span>
-      <input type="checkbox"  />
+      <input type="checkbox" v-model="time.timestatus" />
       <div class="toggle-control "  @click="checkTime"></div><span class="material-icons ">schedule</span>
     </label>
   </div>  
-  <div>
+  <div v-for="logo in generalsettings" :key="logo">
     <label class="label toggle "> <span class="font ">Logo</span>
-      <input type="checkbox"  />
+      <input type="checkbox" v-model="logo.logostatus" />
       <div class="toggle-control "  @click="checkLogo"></div><span class="material-icons ">wallpaper</span>
     </label>
   </div> 
-  <div>
+  <div v-for="ad in advertisements" :key="ad">
     <label class="label toggle "> <span class="font ">Ad</span>
-      <input type="checkbox"  />
+      <input type="checkbox" v-model="ad.adstatus" />
       <div class="toggle-control "  @click="checkAd"></div><span class="material-icons ">format_indent_increase</span>
     </label>
   </div> 
-  <div>
+  <div v-for="back in backgroundsettings" :key="back">
     <label class="label toggle "> <span class="font ">Theme</span>
-      <input type="checkbox"  />
+      <input type="checkbox" v-model="back.imagestatus" />
       <div class="toggle-control "  @click="checkTheme"></div><span class="material-icons ">wallpaper</span>
     </label>
   </div> 
@@ -70,88 +70,101 @@ export default {
         id: ""
       },
     }
-  },
+  },  
   methods:{  
-    checkPreCall() {
+    checkPreCall() {  
       this.status = !this.status
       this.$emit("input")
       console.log(" PreCall Status is: ",this.status)
 
-      const ress = axios.get(BASE_URL + '/api/callsettings/', { 
+      axios.put(BASE_URL + '/api/callsettings/', { 
       methods: "PUT",
       status: this.status, 
       id: 1
-      }).catch(err=>{console.log(err)})
-      this.status = [...this.callsettings, ress.data.callsettings.status] 
-
-      const res = axios.put(BASE_URL + '/api/callsettings/', { 
-      methods: "PUT",
-      status: this.status, 
-      id: 1
-      }).catch(err=>{console.log(err)})
-      this.callsettings = [...this.callsettings, res.data] 
+      }).catch(err=>{console.log(err)}) 
     },
     checkSound() {
       this.soundstatus = !this.soundstatus
       this.$emit("input")
       console.log(" Sound Status is: ",this.soundstatus)
 
-      const res = axios.put(BASE_URL + '/api/soundsettings/', { 
+      axios.put(BASE_URL + '/api/soundsettings/', { 
       methods: "PUT",
       soundstatus: this.soundstatus, 
       id: 1
-      }).catch(err=>{console.log(err)})
-      this.soundsettings = [...this.soundsettings, res.data]
+      }).catch(err=>{console.log(err)}) 
     },
     checkTime() {
       this.timestatus = !this.timestatus
       this.$emit("input" )
       console.log(" Time Status is: ",this.timestatus)
 
-      const res = axios.put(BASE_URL + '/api/generalsettings/', { 
+      axios.put(BASE_URL + '/api/generalsettings/', { 
       methods: "PUT", 
       timestatus: this.timestatus, 
       id: 1
-      }).catch(err=>{console.log(err)})
-      this.generalsettings = [...this.generalsettings, res.data]
+      }).catch(err=>{console.log(err)}) 
     },
     checkTheme() {
       this.imagestatus = !this.imagestatus
       this.$emit("input" )
       console.log(" Theme Status is: ",this.imagestatus)
 
-      const res = axios.put(BASE_URL + '/api/backgroundsettings/', { 
+      axios.put(BASE_URL + '/api/backgroundsettings/', { 
       methods: "PUT", 
       imagestatus: this.imagestatus,
       id: 1
       }).catch(err=>{console.log(err)})
-      this.backgroundsettings = [...this.backgroundsettings, res.data]
     },
     checkAd() {
       this.adstatus = !this.adstatus
       this.$emit("input" )
       console.log(" Advertisement Status is: ",this.adstatus)
 
-      const res = axios.put(BASE_URL + '/api/advertisements/', { 
+      axios.put(BASE_URL + '/api/advertisements/', { 
       methods: "PUT", 
       adstatus: this.adstatus, 
       id: 1
       }).catch(err=>{console.log(err)})
-      this.advertisements = [...this.advertisements, res.data]
     },
     checkLogo() {
       this.logostatus = !this.logostatus
       this.$emit("input" )
       console.log(" Logo Status is: ",this.logostatus)
 
-      const res = axios.put(BASE_URL + '/api/generalsettings/', { 
+      axios.put(BASE_URL + '/api/generalsettings/', { 
       methods: "PUT", 
       logostatus: this.logostatus,
       id: 1
       }).catch(err=>{console.log(err)})
-      this.generalsettings = [...this.generalsettings, res.data]
     },
   },
+  created(){ 
+      fetch(BASE_URL + "/api/callsettings")
+        .then(response => response.json())
+        .then(data => (this.callsettings = data))
+        .catch(error=>{console.log(error)})
+
+      fetch(BASE_URL + "/api/generalsettings")
+        .then(response => response.json())
+        .then(data => (this.generalsettings = data))
+        .catch(error=>{console.log(error)}) 
+
+      fetch(BASE_URL + "/api/advertisements")
+        .then(response => response.json())
+        .then(data => (this.advertisements = data))
+        .catch(error=>{console.log(error)}) 
+
+      fetch(BASE_URL + "/api/soundsettings")
+        .then(response => response.json())
+        .then(data => (this.soundsettings = data))
+        .catch(error=>{console.log(error)})   
+
+      fetch(BASE_URL + "/api/backgroundsettings")
+        .then(response => response.json())
+        .then(data => (this.backgroundsettings = data))
+        .catch(error=>{console.log(error)})  
+  }
 }
 </script>
 
@@ -176,6 +189,7 @@ div{
 .toggle .toggle-control {
   -webkit-transition: 0.3s cubic-bezier(0.98, 0.99, 1, 0.99);
           transition: 0.3s cubic-bezier(0.98, 0.99, 1, 0.99);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 3px 2px rgba(0, 0, 0, 0.4);
   width: 18%;
   height: 20%;
   display: inline-block; 

@@ -54,7 +54,7 @@
 
 <script> 
 import axios from "axios"
-const BASE_URL =  "http://192.168.1.102:3000" 
+const BASE_URL =  "http://192.168.1.109:3000" 
 
 export default {
   data(){

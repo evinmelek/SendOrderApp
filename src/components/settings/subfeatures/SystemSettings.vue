@@ -57,7 +57,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+// importing axios for data processes
+import axios from "axios"
+// importing backend api url  
 const BASE_URL = "http://localhost:3000"
 export default {
   data() {

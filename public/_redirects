@@ -1,0 +1,7 @@
+# Netlify settings for single-page application
+/*    /index.html   200
+/    /index.html   200
+/theme    /index.html   200
+/settings    /index.html   200
+/settings/pre-call    /index.html   200
+/settings/system    /index.html   200

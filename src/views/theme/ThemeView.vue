@@ -5,7 +5,7 @@
 </template>
 
 <script> 
-import ThemeComponent from "@/components/ThemeComponent.vue"
+import ThemeComponent from "@/components/theme/ThemeComponent.vue"
 export default { 
   components:{
     ThemeComponent

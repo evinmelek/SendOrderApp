@@ -1,7 +1,16 @@
-const { defineConfig } = require('@vue/cli-service')
-module.exports = defineConfig({
-  transpileDependencies: true,
+module.exports = { 
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/LpCell/'
-    : '/' 
-})
+    ? '/'
+    : '/',
+  pwa: {
+    name: "LP Cell App",
+    themeColor: '#4DBA87',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black', 
+      workboxOptions: { 
+        swDest: 'service-worker.js',
+        exclude: [/_redirects/]
+      }
+    } 
+}

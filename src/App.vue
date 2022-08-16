@@ -1,16 +1,23 @@
 <template>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <div class="icon-bar"> 
-    <router-link to="/" class="material-icons">home</router-link> 
+    <router-link to="/home" class="material-icons">home</router-link> 
     <router-link to="/theme" class="material-icons">color_lens</router-link> 
     <router-link to="/settings" class="material-icons">settings</router-link>
-  </div> 
-  <router-view/> 
+  </div>  
+  <router-view v-slot="{ Component }"> 
+  <keep-alive >
+    <component :is="Component" />
+  </keep-alive>
+</router-view>
 </template>
 
-<script>
+<script> 
 
-export default {
+export default { 
+//  created(){ 
+//    this.$router.push('/') 
+//  }
 
 }
 </script>

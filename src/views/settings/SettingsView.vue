@@ -6,7 +6,7 @@
 
 <script>
 
-import SettingsComponent from "@/components/SettingsComponent.vue" 
+import SettingsComponent from "@/components/settings/SettingsComponent.vue" 
 export default {
     components:{
         SettingsComponent, 

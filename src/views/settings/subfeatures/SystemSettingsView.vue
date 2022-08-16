@@ -5,7 +5,7 @@
 </template>
 
 <script> 
-import SystemSettings from "@/components/settings/SystemSettings.vue"
+import SystemSettings from "@/components/settings/subfeatures/SystemSettings.vue"
 export default { 
   components:{
     SystemSettings

@@ -5,7 +5,7 @@
 </template>
 
 <script> 
-import PreCallToggle from "@/components/settings/PreCallToggle.vue"
+import PreCallToggle from "@/components/settings/subfeatures/PreCallToggle.vue"
 export default { 
   components:{
     PreCallToggle
